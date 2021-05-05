@@ -18,6 +18,7 @@ import javax.mail.internet.MimeMultipart;
 import java.io.BufferedInputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.Executors;
@@ -30,12 +31,10 @@ public class App {
 
     public Properties getProperties() throws IOException {
         Properties properties = new Properties();
-        ClassLoader cl = this.getClass().getClassLoader();
-        String filePath = cl.getResource("application.properties").getFile();
 
-        BufferedInputStream bis = new BufferedInputStream(
-                new FileInputStream(filePath));
-        properties.load(bis);
+        try (InputStream is = App.class.getClassLoader().getResourceAsStream("application.properties")) {
+            properties.load(is);
+        }
         return properties;
     }
 
